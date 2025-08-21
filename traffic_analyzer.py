@@ -44,7 +44,7 @@ class TrafficAnalyzer:
 
     def _prepare_data(self):
         """Add computed columns and indices"""
-        # Add bidirectional route identifier (alphabetically sorted)
+        # Add bidirectional route identifier
         self.df["Route_Bidirectional"] = self.df.apply(
             lambda x: "-".join(sorted([x["AustralianPort"], x["ForeignPort"]])), axis=1
         )
@@ -102,7 +102,7 @@ class TrafficAnalyzer:
             grouped = grouped.reset_index()
             grouped["Label"] = grouped["Country"]
 
-        # Get top and bottom (excluding zeros for bottom)
+        # Get top and bottom
         top_performers = grouped.nlargest(top_n, metric_col)
         bottom_performers = grouped[grouped[metric_col] > 0].nsmallest(
             bottom_n, metric_col
@@ -523,7 +523,7 @@ class TrafficAnalyzer:
             ax.grid(True, alpha=0.3)
 
         else:
-            # Multiple series - use different visualization based on count
+            # Multiple series
             n_series = temporal_df["Label"].nunique()
 
             if n_series <= 5:
