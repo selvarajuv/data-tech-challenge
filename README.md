@@ -1,66 +1,110 @@
-# Generate: Data Branch Tech Challenge
-Congratulations on making it to the second stage of the application! Thank you for applying to Generate and choosing the Data Branch! 
+# AeroConnect Route Optimization Analysis
 
-In this step of the application process, you will be completing a take-home challenge and have an interview. In the interview, you will share your screen and walk us through the process you went through to complete the challenge. Be creative! Show us what you know!
+## Overview
 
-**DO NOT** use generative AI (ChatGPT, Claude, etc.) in any part of your challenge. It is important to think outside the box and try different things! If you have any questions about any part of the challenge, don't hesitate to reach out to any one of us!
+Data-driven analysis of international airline routes to optimize capacity allocation and identify growth opportunities. This project analyzes historical traffic data (1985-1989) to forecast future demand and provide strategic recommendations for AeroConnect's network.
 
-Please finish this challenge before the date of your interview. Please read through this document thoroughly to make sure you follow ALL instructions. Try your best, and we can't wait to meet you!
+## Project Structure
 
+### Core Analysis Classes
 
-# Synopsis
-You're been brought in as a Data Scientist on a project with AeroConnect, an international airline focused on optimizing its routes and expanding profitable city pairs. The client wants to know:   
-    a) Which routes have the highest and lowest passenger traffic over time?  
-    b) Are there any trends or growth patterns across different cities or regions?  
-    c) Can we predict traffic to help with resource allocations(aircrafts, crew, etc.)?  
+**`traffic_analyzer.py`**
 
+- Comprehensive traffic analysis for route optimization
+- Key functions: ranking analysis, temporal trends, balance metrics, seasonal patterns
+- Identifies top/bottom performers and growth opportunities
+- Generates visualizations and automated insights
 
-# Your Task  
-**CSV:** https://docs.google.com/spreadsheets/d/106VMqDhav1rPpEhVJHYQqEW8yZ_kxml7/edit?usp=sharing&ouid=110539250374045439410&rtpof=true&sd=true
-1. Understanding the Data  
-   a) Identify the most and least trafficked routes  
-   b) Analyze trends and/or geographical patterns  
-   c) Create visualizations to demonstrate trends & patterns determined in part b  
+**`route_forecaster.py`**
 
-2. Build a Model  
-   a) Your model should predict passenger traffic for the next 6–12 months on at least 1 city pair  
-   **NOTE:** Make sure to use proper coding practices (i.e. commenting, camelcase, etc.)!  
+- Time series forecasting for individual routes
+- Implements 4 models: SARIMA, Prophet, Exponential Smoothing, Moving Average
+- Automatic model selection based on MAPE performance
+- Handles data preparation and train/test splitting
 
-4. Evaluate your model  
-   a) Explain your model choices — why did you choose the elements you did  
-   b) Evaluate the model's performance & report the accuracy of the model  
+**`future_forecaster.py`**
 
-5. Provide Recommendations  
-   a) Which routes should AeroConnect invest more in or scale back from?  
-   b) How can AeroConnect use this model going forward?
+- Generates 6-12 month predictions using best performing models
+- Provides confidence intervals for risk assessment
+- Exports forecasts and creates visualization plots
+- Works with RouteForecaster to produce production-ready predictions
 
+### Analysis Notebook
 
-# Deliverables   
-1. Cleaned (if needed) data from the given CSV
-2. Code for the model
-3. Visualizations from Task 1c)
-4. Answers to questions 1a, 1b, 2a, 2b, 3a, and 3b in PDF format
-5. README file describing your process AND including the link to your cleaned data
+**`main.ipynb`**
 
+- Complete end-to-end analysis pipeline
+- Data loading, cleaning, and exploration
+- Traffic analysis and visualization
+- Forecasting model implementation and evaluation
+- Strategic recommendations generation
 
-# Important Steps   
-1. Fork the repo -- This creates a copy of the repo under your account  
-     a) At the top-right corner of the repo page, click "fork"  
-     b) Choose the Github account as the destination  
-     c) Clone the forked repo: "git clone https://github.com/YOUR-USERNAME/data-tech-challenge.git"  
-   ** This is the model you will be sharing during your interview **
-2. **DO NOT PUSH YOUR UPDATED DATA DIRECTLY TO THE FORKED REPO**  
-   Instead, upload it to google drive and include the link in your README file.
+### Data
 
-Good luck, and have fun with it!
+**Input**: `airline_traffic.csv`
 
-# Communication
-If you have ANY questions, please do not hesitate to reach out to any of the following:    
-- Haley Martin (Director of Data) : martin.hal@northeastern.edu
-- Sonal Gupta (Chief of Data) : gupta.sonal@northeastern.edu
-- Nandeenee Singh (Chief of Data) : singh.nand@northeastern.edu
-- Kaydence Lin (Project Lead of Data) : lin.kay@northeastern.edu
-- Tanisha Joshi (Project Lead of Data) : joshi.tani@northeastern.edu
-- Ben Marler (Tech Lead of Data) : marler.b@northeastern.edu
-- Jerome Rodrigo (Tech Lead of Data) : rodrigo.j@northeastern.edu
+- https://drive.google.com/file/d/1JjQQxGEvbSmBbHWK_f-hzbLnCvVcaH7E/view?usp=drive_link
+- Monthly traffic data (passengers, freight, mail)
+- Australian ports to foreign destinations
+- January 1985 - December 1989
 
+**Key Columns**:
+
+- `AustralianPort`, `ForeignPort`, `Country`
+- `Passengers_In/Out`, `Freight_In/Out`, `Mail_In/Out`
+- `Month` (formatted as MMM-YY)
+
+## Key Findings
+
+### Traffic Analysis
+
+- **Sydney-Auckland** dominates with 30x average route traffic
+- Top 5 routes account for 26.6% of passenger traffic
+- Strong seasonality with December-January peaks (Southern summer)
+- 1989 industrial strike caused complete traffic cessation
+
+### Forecasting Results
+
+- Average MAPE of 7.8% across core routes (industry-leading accuracy)
+- **Sydney-Auckland**: SARIMA model, 10.8% MAPE
+- **Sydney-Singapore**: Exponential Smoothing, 5.5% MAPE
+- **Sydney-Tokyo**: Moving Average, 7.2% MAPE
+
+### Strategic Recommendations
+
+1. Increase capacity on Sydney-Singapore (strong growth trajectory)
+2. Optimize Sydney-Auckland for seasonal peaks
+3. Review Sydney-Tokyo declining forecast
+4. Implement comprehensive data collection for emerging routes
+5. Exit underperforming routes (Melbourne-Chicago, Sydney-Denver)
+
+## Installation
+
+```bash
+# Clone repository
+git clone https://github.com/YOUR-USERNAME/aeroconnect-analysis.git
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+## Usage
+
+```python
+# Traffic Analysis
+from traffic_analyzer import TrafficAnalyzer
+analyzer = TrafficAnalyzer(df)
+results = analyzer.analyze_ranking(traffic_type='passengers')
+
+# Forecasting
+from route_forecaster import RouteForecaster
+from future_forecaster import FutureForecaster
+
+# Fit models and evaluate
+rf = RouteForecaster(df, 'Sydney-Auckland')
+rf.run_complete_analysis()
+
+# Generate future predictions
+ff = FutureForecaster(rf)
+ff.get_best_model_forecast(n_months=12)
+```
