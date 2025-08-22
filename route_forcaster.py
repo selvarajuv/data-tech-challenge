@@ -110,7 +110,7 @@ class RouteForecaster:
 
         return self.train_data, self.test_data
 
-    def fit_sarima(self, order=(1, 1, 1), seasonal_order=(1, 1, 1, 12)):
+    def fit_sarima(self):
         """
         Fit SARIMA model with specified parameters
         """
@@ -317,7 +317,7 @@ class RouteForecaster:
         """
         fig, axes = plt.subplots(2, 1, figsize=(14, 10))
 
-        # Plot 1: Time series with train/test split
+        # Time series with train/test split
         ax1 = axes[0]
         ax1.plot(
             self.train_data.index,
@@ -341,7 +341,7 @@ class RouteForecaster:
         ax1.legend()
         ax1.grid(True, alpha=0.3)
 
-        # Plot 2: Model predictions comparison
+        # Model predictions comparison
         ax2 = axes[1]
         ax2.plot(
             self.test_data.index,
@@ -402,7 +402,7 @@ class RouteForecaster:
         self.fit_sarima()
         self.fit_prophet()
         self.fit_exponential_smoothing()
-        self.fit_moving_average()  # Alternative to pmdarima
+        self.fit_moving_average()
 
         # Evaluate models
         best_model = self.evaluate_models()
@@ -424,7 +424,6 @@ class FutureForecaster:
         Initialize with a fitted RouteForecaster instance.
 
         Parameters:
-        -----------
         route_forecaster : RouteForecaster
             A RouteForecaster instance with fitted models
         """
@@ -437,7 +436,6 @@ class FutureForecaster:
         Generate future date range for forecasting.
 
         Parameters:
-        -----------
         n_months : int
             Number of months to forecast ahead
         """
@@ -460,9 +458,6 @@ class FutureForecaster:
             return None
 
         try:
-            # Refit model on full data for better predictions
-            from statsmodels.tsa.statespace.sarimax import SARIMAX
-
             # Get the best parameters from the fitted model
             model = self.rf.models["SARIMA"]
             order = model.model.order
@@ -512,9 +507,6 @@ class FutureForecaster:
                 {"ds": self.rf.full_data.index, "y": self.rf.full_data.values}
             )
 
-            # Refit Prophet on full data
-            from prophet import Prophet
-
             model = Prophet(
                 yearly_seasonality=True,
                 weekly_seasonality=False,
@@ -558,9 +550,6 @@ class FutureForecaster:
             return None
 
         try:
-            # Refit on full data
-            from statsmodels.tsa.holtwinters import ExponentialSmoothing
-
             model = ExponentialSmoothing(
                 self.rf.full_data,
                 seasonal="add",

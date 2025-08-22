@@ -81,7 +81,7 @@ class TrafficAnalyzer:
             top_n: Number of top performers to show
             bottom_n: Number of bottom performers to show
         """
-        # Get the appropriate column
+        # Get appropriate column
         metric_col = self.traffic_mappings[traffic_type][direction]
 
         # Group data based on level
@@ -165,7 +165,6 @@ class TrafficAnalyzer:
         direction="total",
         routes=None,
         groupby_level="total",
-        freq="M",
     ):
         """
         Analyze traffic trends over time
@@ -175,11 +174,10 @@ class TrafficAnalyzer:
             direction: 'in', 'out', or 'total'
             routes: List of specific routes to analyze (optional)
             groupby_level: 'total', 'route', 'port', or 'country'
-            freq: Frequency for resampling ('M' for monthly, 'Q' for quarterly)
         """
         metric_col = self.traffic_mappings[traffic_type][direction]
 
-        # Filter routes if specified
+        # Filter routes
         data = self.df.copy()
         if routes:
             route_filter = data["Route_Directional"].isin(routes)
@@ -666,7 +664,7 @@ class TrafficAnalyzer:
             # Radar plot
             angles = np.linspace(0, 2 * np.pi, 12, endpoint=False).tolist()
             values = seasonal_df[metric_col].tolist()
-            values += values[:1]  # Complete the circle
+            values += values[:1]
             angles += angles[:1]
 
             axes[0].plot(angles, values, "o-", linewidth=2, color="steelblue")
@@ -922,7 +920,7 @@ class TrafficAnalyzer:
             route_data = route_data.sort_values("Month_dt")
 
             if len(route_data) > 3:
-                # Calculate month-over-month growth, replacing inf with NaN
+                # Calculate month-over-month growth
                 growth_rates = route_data["Passengers_Total"].pct_change() * 100
                 growth_rates = growth_rates.replace([np.inf, -np.inf], np.nan)
 
