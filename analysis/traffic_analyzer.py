@@ -718,7 +718,7 @@ class TrafficAnalyzer:
 
     # Insight detection methods
     def _detect_ranking_insights(
-        self, top_df, bottom_df, stats, traffic_type, groupby_level, metric_col
+        self, top_df, stats, traffic_type, groupby_level, metric_col
     ):
         """Detect insights from ranking analysis"""
         insights = []
@@ -759,7 +759,7 @@ class TrafficAnalyzer:
 
         return insights
 
-    def _detect_temporal_insights(self, temporal_df, stats, traffic_type):
+    def _detect_temporal_insights(self, stats, traffic_type):
         """Detect insights from temporal analysis"""
         insights = []
 
@@ -826,7 +826,7 @@ class TrafficAnalyzer:
 
         return insights
 
-    def _detect_seasonal_insights(self, seasonal_df, stats, traffic_type):
+    def _detect_seasonal_insights(self, stats, traffic_type):
         """Detect insights from seasonal analysis"""
         insights = []
 

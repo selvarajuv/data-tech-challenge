@@ -118,7 +118,7 @@ class RouteForecaster:
 
         try:
             param_combinations = [
-                ((1, 1, 1), (0, 1, 1, 12)),  # Simpler seasonal (no seasonal AR)
+                ((1, 1, 1), (0, 1, 1, 12)),  # Simpler seasonal
                 ((1, 1, 1), (1, 0, 1, 12)),  # No seasonal differencing
                 ((1, 1, 1), (1, 1, 0, 12)),  # No seasonal MA
                 ((1, 0, 1), (1, 0, 1, 12)),  # No differencing at all
