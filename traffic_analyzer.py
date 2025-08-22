@@ -45,8 +45,8 @@ class TrafficAnalyzer:
     def _prepare_data(self):
         """Add computed columns and indices"""
         # Add bidirectional route identifier
-        self.df["Route_Bidirectional"] = self.df.apply(
-            lambda x: "-".join(sorted([x["AustralianPort"], x["ForeignPort"]])), axis=1
+        self.df["Route_Bidirectional"] = (
+            self.df["AustralianPort"] + "-" + self.df["ForeignPort"]
         )
 
         # Add directional route identifier
